@@ -22,7 +22,8 @@ allprojects {
 
 apply plugin: 'java'
 apply plugin: 'application'
-apply plugin: "com.github.johnrengelman.shadow"
+apply plugin: 'com.github.johnrengelman.shadow'
+apply plugin: 'maven'
 
 
 sourceCompatibility = 1.8
@@ -48,4 +49,21 @@ shadowJar {
 
 task wrapper(type: Wrapper) {
     gradleVersion = '3.3'
+}
+
+task writeNewPom {
+    doLast {
+        pom {
+            project {
+                inceptionYear '2017'
+                licenses {
+                    license {
+                        name 'The Apache Software License, Version 2.0'
+                        url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                        distribution 'repo'
+                    }
+                }
+            }
+        }.writeTo("$projectDir/pom.xml")
+    }
 }
