@@ -17,12 +17,15 @@
 ## ID 规则
 
 **Vertex**
+
 对于Vertex ID 走 Graph ID系统，同时生成一个业务 ID ( `bid` )。 `bid` 来至于导入源，由业务系统的 ID 或者 唯一索引定制。
 
 **Edge**
+
 走Graph ID系统
 
 **Property**
+
 走Graph ID系统
 
 ## Label 规则
