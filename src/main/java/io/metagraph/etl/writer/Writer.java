@@ -25,10 +25,10 @@ import java.util.Map;
 public interface Writer {
 
     /**
-    * @param traversal dsl
-    * @param variables params
-    */
-    Object write(String traversal, Map<String,Object> variables);
+     * @param traversal dsl
+     * @param variables params
+     */
+    Object write(String traversal, Map<String, Object> variables);
 
 
 }

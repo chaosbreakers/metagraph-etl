@@ -17,9 +17,9 @@
 
 package io.metagraph.etl.reader;
 
-import io.metagraph.etl.reader.config.ReaderConfig;
-
 import java.util.Map;
+
+import io.metagraph.etl.reader.config.ReaderConfig;
 
 /**
  * @author Ranger Tsao(https://github.com/boliza)
@@ -28,14 +28,16 @@ public interface Reader {
 
     /**
      * Transform record line to graph vertices or edges by mapping rule defined in readerConfig
+     *
      * @param readerConfig
-     * @param record record to transform
+     * @param record       record to transform
      * @return
      */
-    Map<String,Object> read(ReaderConfig readerConfig,String record);
+    Map<String, Object> read(ReaderConfig readerConfig, String record);
 
     /**
      * file verticle can get file path from this config to read.
+     *
      * @return
      */
     ReaderConfig getReaderConfig();
