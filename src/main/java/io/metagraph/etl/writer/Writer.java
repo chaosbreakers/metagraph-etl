@@ -21,4 +21,11 @@ package io.metagraph.etl.writer;
  * @author Ranger Tsao(https://github.com/boliza)
  */
 public interface Writer {
+
+    /**
+    * @param traversal dsl
+    * @param variables params
+    */
+    Object write(String traversal, Map<String,Object> variables);
+
 }
