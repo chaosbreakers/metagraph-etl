@@ -8,9 +8,10 @@
     - 支持 `Rest` `Websocket` 写入
 3. 灵活配置
     - 配置点、边写入规则
-    - 配置 `Reader` 与 `Writer` 
+    - 配置 `Reader` 与 `Writer`
 4. 支持定时任务
-5. 度量统计写入
+5. 自动生成模型对应文档，提供简单查询例子
+6. 度量统计写入
 
 # 规则
 
@@ -63,4 +64,3 @@ g.V().hasLabel(label).has('bid',bid)
 4. vert.x-shell    (交互式命令行)
 5. vert.x-config   (存储规则)
 6. vert.x-schedule (定时任务，用于增量导入)
-
