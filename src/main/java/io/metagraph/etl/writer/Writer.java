@@ -17,6 +17,8 @@
 
 package io.metagraph.etl.writer;
 
+import java.util.Map;
+
 /**
  * @author Ranger Tsao(https://github.com/boliza)
  */
@@ -27,5 +29,6 @@ public interface Writer {
     * @param variables params
     */
     Object write(String traversal, Map<String,Object> variables);
+
 
 }
