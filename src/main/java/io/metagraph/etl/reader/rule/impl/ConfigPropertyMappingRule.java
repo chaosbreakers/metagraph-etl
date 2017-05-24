@@ -17,10 +17,10 @@
 
 package io.metagraph.etl.reader.rule.impl;
 
-import com.google.common.collect.Maps;
 
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import io.metagraph.etl.reader.rule.PropertyMappingRule;
@@ -43,7 +43,7 @@ public class ConfigPropertyMappingRule implements PropertyMappingRule {
             return record;
         }
 
-        Map<String, String> transformedRecord = Maps.newHashMap(record);
+        Map<String, String> transformedRecord = new HashMap(record);
         for (String filedKey : record.keySet()) {
             String mappedKeyName = keyInMappings(filedKey);
             if (StringUtils.isNoneBlank(mappedKeyName)) {
