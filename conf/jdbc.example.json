@@ -1,0 +1,40 @@
+{
+  "jdbc": {
+    "provider_class": "",
+    "row_stream_fetch_size": 128,
+    "driver_class": "",
+    "url": "",
+    "user": "",
+    "password": "",
+    "max_pool_size": 30
+  },
+  "graph": {
+    "provider_class": "",
+    "provider_config": {
+    }
+  },
+  "etl": {
+    "schedule": {
+      "enable": "true",
+      "internal": 480000
+    },
+    "tables": [
+      {
+        "table_name": "",
+        "statement": "",
+        "rule": {
+          "bid_column": "",
+          "edges": [
+            {
+              "join_label": "",
+              "join_table": ""
+            }
+          ],
+          "vertex_label": ""
+        }
+      }
+    ]
+  },
+  "metrics": {
+  }
+}
