@@ -1,6 +1,8 @@
 group = 'io.metagraph.etl'
 version = '1.0.0-SNAPSHOT'
 
+ext.vertx_version = '3.4.1'
+
 buildscript {
     repositories {
         mavenLocal()
@@ -31,11 +33,13 @@ targetCompatibility = 1.8
 mainClassName = 'io.vertx.core.Launcher'
 
 dependencies {
-    compile 'io.vertx:vertx-core:3.4.1'
-    compile 'io.vertx:vertx-web:3.4.1'
-    compile 'io.vertx:vertx-web-client:3.4.1'
-    compile 'io.vertx:vertx-shell:3.4.1'
-    compile 'org.apache.commons:commons-lang3:3.5'
+    compile "io.vertx:vertx-core:$vertx_version"
+    compile "io.vertx:vertx-jdbc-client:$vertx_version"
+    compile "io.vertx:vertx-sql-common:$vertx_version"
+    compile "io.vertx:vertx-web:$vertx_version"
+    compile "io.vertx:vertx-web-client:$vertx_version"
+    compile "io.vertx:vertx-shell:$vertx_version"
+    compile "org.apache.commons:commons-lang3:3.5"
 }
 
 shadowJar {
