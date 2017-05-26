@@ -6,7 +6,8 @@
     "url": "",
     "user": "",
     "password": "",
-    "max_pool_size": 30
+    "max_pool_size": 30,
+    "page_size": 10
   },
   "graph": {
     "provider_class": "",

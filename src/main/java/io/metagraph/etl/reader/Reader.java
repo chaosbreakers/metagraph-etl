@@ -20,11 +20,18 @@ package io.metagraph.etl.reader;
 import java.util.Map;
 
 import io.metagraph.etl.reader.config.ReaderConfig;
+import io.metagraph.etl.reader.impl.JDBCReader;
+import io.vertx.core.Vertx;
+import io.vertx.core.json.JsonObject;
 
 /**
  * @author Ranger Tsao(https://github.com/boliza)
  */
 public interface Reader {
+
+    static JDBCReader createJDBCReader(Vertx vertx, JsonObject config) {
+        return null;
+    }
 
     /**
      * Transform record line to graph vertices or edges by mapping rule defined in readerConfig
@@ -41,4 +48,13 @@ public interface Reader {
      * @return
      */
     ReaderConfig getReaderConfig();
+
+    /**
+     * etl data continuous
+     *
+     * @return boolean
+     */
+    default boolean continuous() {
+        return false;
+    }
 }
