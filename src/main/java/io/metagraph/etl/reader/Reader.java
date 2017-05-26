@@ -27,7 +27,7 @@ import io.vertx.core.json.JsonObject;
 /**
  * @author Ranger Tsao(https://github.com/boliza)
  */
-public interface Reader {
+public interface Reader<E> extends Iterable {
 
     static JDBCReader createJDBCReader(Vertx vertx, JsonObject config) {
         return null;
@@ -57,4 +57,5 @@ public interface Reader {
     default boolean continuous() {
         return false;
     }
+
 }
