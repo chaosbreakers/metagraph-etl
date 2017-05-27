@@ -21,6 +21,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -51,9 +52,10 @@ public class CSVReader implements Reader {
         this.readerConfig = readerConfig;
     }
 
-    public Map<String, Object> read(ReaderConfig readerConfig, String record) {
+    public Map<String, Object> readNext(ReaderConfig readerConfig) {
         String[] recordFields = null;
-        if (StringUtils.isNotBlank(record)) {
+        String record = iterator().next();
+        if (StringUtils.isNotBlank(iterator().next())) {
             recordFields = record.split(CSV_SPLITTER);
             if (recordFields.length != csvHeader.size()) {
                 //TODO: yixi.guo define specific exception type
@@ -102,5 +104,8 @@ public class CSVReader implements Reader {
         return this.readerConfig;
     }
 
-
+    @Override
+    public Iterator<String> iterator() {
+        return null;
+    }
 }

@@ -17,6 +17,7 @@
 
 package io.metagraph.etl.reader.impl;
 
+import java.util.Iterator;
 import java.util.Map;
 
 import io.metagraph.etl.reader.Reader;
@@ -28,7 +29,7 @@ import io.metagraph.etl.reader.config.ReaderConfig;
 public class JDBCReader implements Reader {
 
     @Override
-    public Map<String, Object> read(ReaderConfig readerConfig, String record) {
+    public Map<String, Object> readNext(ReaderConfig readerConfig) {
         return null;
     }
 
@@ -37,5 +38,8 @@ public class JDBCReader implements Reader {
         return null;
     }
 
-
+    @Override
+    public Iterator iterator() {
+        return null;
+    }
 }

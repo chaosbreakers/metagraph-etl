@@ -36,11 +36,10 @@ public interface Reader<E> extends Iterable {
     /**
      * Transform record line to graph vertices or edges by mapping rule defined in readerConfig
      *
-     * @param readerConfig
-     * @param record       record to transform
-     * @return
+     * @param readerConfig reader rule
+     * @return Map
      */
-    Map<String, Object> read(ReaderConfig readerConfig, String record);
+    Map<String, Object> readNext(ReaderConfig readerConfig);
 
     /**
      * file verticle can get file path from this config to read.
