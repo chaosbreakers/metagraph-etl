@@ -17,36 +17,76 @@
 
 package io.metagraph.etl.reader.impl;
 
-import java.util.Iterator;
-import java.util.Map;
-
 import io.metagraph.etl.reader.Reader;
 import io.metagraph.etl.reader.config.ReaderConfig;
 import io.vertx.core.AsyncResult;
 import io.vertx.core.Handler;
+import io.vertx.core.Vertx;
+import io.vertx.core.json.JsonObject;
+import io.vertx.core.streams.ReadStream;
+import io.vertx.ext.jdbc.JDBCClient;
+import io.vertx.ext.sql.SQLRowStream;
 
 /**
  * @author Ranger Tsao(https://github.com/boliza)
  */
 public class JDBCReader implements Reader {
 
-    @Override
-    public Map<String, Object> readNext(ReaderConfig readerConfig) {
-        return null;
+    private Vertx vertx;
+
+    private JDBCClient jdbcClient;
+    private ReaderConfig readerConfig;
+
+    private SQLRowStream delegate;
+
+    public JDBCReader(Vertx vertx, JsonObject config) {
+        this.vertx = vertx;
+        jdbcClient = JDBCClient.createShared(vertx, config);
+        vertx.executeBlocking(h -> {
+                                  //open connection and query by stream
+                              },
+                              r -> {
+                                  //TODO SQLRowStream
+                              });
     }
 
     @Override
     public ReaderConfig getReaderConfig() {
-        return null;
+        return readerConfig;
     }
 
     @Override
-    public Iterator iterator() {
+    public JsonObject nextRow() {
         return null;
     }
 
     @Override
     public void close(Handler<AsyncResult<Void>> completionHandler) {
 
+    }
+
+    @Override
+    public ReadStream<JsonObject> exceptionHandler(Handler<Throwable> handler) {
+        return null;
+    }
+
+    @Override
+    public ReadStream<JsonObject> handler(Handler<JsonObject> handler) {
+        return null;
+    }
+
+    @Override
+    public ReadStream<JsonObject> pause() {
+        return null;
+    }
+
+    @Override
+    public ReadStream<JsonObject> resume() {
+        return null;
+    }
+
+    @Override
+    public ReadStream<JsonObject> endHandler(Handler<Void> endHandler) {
+        return null;
     }
 }

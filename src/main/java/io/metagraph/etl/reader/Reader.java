@@ -47,4 +47,11 @@ public interface Reader extends ReadStream<JsonObject>, Closeable {
     default boolean continuous() {
         return false;
     }
+
+    /**
+     * read one by one
+     *
+     * @return JsonObject
+     */
+    JsonObject nextRow();
 }
