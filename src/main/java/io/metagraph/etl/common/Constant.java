@@ -20,7 +20,7 @@ package io.metagraph.etl.common;
 /**
  * Created by eguoyix on 17/5/21.
  */
-public class Constant {
+public final class Constant {
 
     public static final String LABEL_KEY = "label";
 
@@ -29,4 +29,9 @@ public class Constant {
     public static final String VERTEX_KEY = "vertex_key";
 
     public static final String EDGES_KEY = "edges_key";
+
+    //event bus address for message
+    public static final String EVENTBUS_ETL_RECEIVER = "io.metagraph.etl:receiver";
+    public static final String EVENTBUS_ETL_METRICS = "io.metagraph.etl:metrics";
+
 }

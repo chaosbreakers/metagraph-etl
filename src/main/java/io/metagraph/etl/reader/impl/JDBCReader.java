@@ -22,6 +22,8 @@ import java.util.Map;
 
 import io.metagraph.etl.reader.Reader;
 import io.metagraph.etl.reader.config.ReaderConfig;
+import io.vertx.core.AsyncResult;
+import io.vertx.core.Handler;
 
 /**
  * @author Ranger Tsao(https://github.com/boliza)
@@ -41,5 +43,10 @@ public class JDBCReader implements Reader {
     @Override
     public Iterator iterator() {
         return null;
+    }
+
+    @Override
+    public void close(Handler<AsyncResult<Void>> completionHandler) {
+
     }
 }

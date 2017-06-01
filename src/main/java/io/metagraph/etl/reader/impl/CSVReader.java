@@ -21,7 +21,6 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -30,6 +29,10 @@ import io.metagraph.etl.reader.Reader;
 import io.metagraph.etl.reader.config.ReaderConfig;
 import io.metagraph.etl.reader.rule.EdgeLabelNamingRule;
 import io.metagraph.etl.reader.rule.PropertyMappingRule;
+import io.vertx.core.AsyncResult;
+import io.vertx.core.Handler;
+import io.vertx.core.json.JsonObject;
+import io.vertx.core.streams.ReadStream;
 
 /**
  * Created by eguoyix on 17/5/21.
@@ -54,8 +57,8 @@ public class CSVReader implements Reader {
 
     public Map<String, Object> readNext(ReaderConfig readerConfig) {
         String[] recordFields = null;
-        String record = iterator().next();
-        if (StringUtils.isNotBlank(iterator().next())) {
+        String record = null;
+        if (StringUtils.isNotBlank(record)) {
             recordFields = record.split(CSV_SPLITTER);
             if (recordFields.length != csvHeader.size()) {
                 //TODO: yixi.guo define specific exception type
@@ -105,7 +108,32 @@ public class CSVReader implements Reader {
     }
 
     @Override
-    public Iterator<String> iterator() {
+    public void close(Handler<AsyncResult<Void>> completionHandler) {
+
+    }
+
+    @Override
+    public ReadStream<JsonObject> exceptionHandler(Handler<Throwable> handler) {
+        return null;
+    }
+
+    @Override
+    public ReadStream<JsonObject> handler(Handler<JsonObject> handler) {
+        return null;
+    }
+
+    @Override
+    public ReadStream<JsonObject> pause() {
+        return null;
+    }
+
+    @Override
+    public ReadStream<JsonObject> resume() {
+        return null;
+    }
+
+    @Override
+    public ReadStream<JsonObject> endHandler(Handler<Void> endHandler) {
         return null;
     }
 }

@@ -17,29 +17,20 @@
 
 package io.metagraph.etl.reader;
 
-import java.util.Map;
-
 import io.metagraph.etl.reader.config.ReaderConfig;
-import io.metagraph.etl.reader.impl.JDBCReader;
+import io.vertx.core.Closeable;
 import io.vertx.core.Vertx;
 import io.vertx.core.json.JsonObject;
+import io.vertx.core.streams.ReadStream;
 
 /**
  * @author Ranger Tsao(https://github.com/boliza)
  */
-public interface Reader<E> extends Iterable {
+public interface Reader extends ReadStream<JsonObject>, Closeable {
 
-    static JDBCReader createJDBCReader(Vertx vertx, JsonObject config) {
+    static Reader createReader(Vertx vertx, JsonObject config) {
         return null;
     }
-
-    /**
-     * Transform record line to graph vertices or edges by mapping rule defined in readerConfig
-     *
-     * @param readerConfig reader rule
-     * @return Map
-     */
-    Map<String, Object> readNext(ReaderConfig readerConfig);
 
     /**
      * file verticle can get file path from this config to read.
@@ -56,5 +47,4 @@ public interface Reader<E> extends Iterable {
     default boolean continuous() {
         return false;
     }
-
 }

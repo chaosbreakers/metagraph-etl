@@ -19,16 +19,22 @@ package io.metagraph.etl.writer;
 
 import java.util.Map;
 
+import io.vertx.core.Closeable;
+import io.vertx.core.Vertx;
+import io.vertx.core.json.JsonObject;
+
 /**
  * @author Ranger Tsao(https://github.com/boliza)
  */
-public interface Writer {
+public interface Writer extends Closeable {
+
+    static Writer createWriter(Vertx vertx, JsonObject config) {
+        return null;
+    }
 
     /**
      * @param traversal dsl
      * @param variables params
      */
     Object write(String traversal, Map<String, Object> variables);
-
-
 }

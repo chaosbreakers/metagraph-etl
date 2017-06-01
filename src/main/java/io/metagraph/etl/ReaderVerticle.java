@@ -17,40 +17,38 @@
 
 package io.metagraph.etl;
 
+import io.metagraph.etl.common.Constant;
 import io.metagraph.etl.reader.Reader;
-import io.metagraph.etl.reader.impl.JDBCReader;
 import io.vertx.core.AbstractVerticle;
-import io.vertx.core.Future;
 import io.vertx.core.logging.Logger;
 import io.vertx.core.logging.LoggerFactory;
 
 /**
  * @author Ranger Tsao(https://github.com/boliza)
  */
-public class JDBCVerticle extends AbstractVerticle {
+public class ReaderVerticle extends AbstractVerticle {
 
-    private Logger logger = LoggerFactory.getLogger(JDBCVerticle.class);
-
-    private int pageNum = 0;
+    private Logger logger = LoggerFactory.getLogger(WriterVerticle.class);
+    private Reader reader;
 
     @Override
-    public void start(Future<Void> startFuture) throws Exception {
-        //read page num from task config
-
-        JDBCReader reader = Reader.createJDBCReader(vertx, config());
-        //continuous
-        if (reader.continuous()) {
-            long timerId = vertx.setPeriodic(config().getJsonObject("etl").getJsonObject("schedule").getLong("internal"), event -> {
-                //read data by page
-            });
-        }
-
-        startFuture.complete();
+    public void start() throws Exception {
+        //init reader
+        reader = Reader.createReader(vertx, config());
+        assert reader != null;
+        reader.handler(row -> vertx.eventBus().send(Constant.EVENTBUS_ETL_RECEIVER, row));
+        reader.endHandler(end -> vertx.close());
     }
 
     @Override
-    public void stop(Future<Void> stopFuture) throws Exception {
-        super.stop(stopFuture);
+    public void stop() throws Exception {
+        reader.close(event -> {
+            if (event.succeeded()) {
+                logger.info("stop Reader[{0}] succeed", reader);
+                vertx.close();
+            } else {
+                logger.error("can't stop Writer[{0}] because of {1}", reader, event.cause());
+            }
+        });
     }
 }
-
