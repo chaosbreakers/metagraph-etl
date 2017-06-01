@@ -36,7 +36,6 @@ import io.vertx.core.streams.ReadStream;
 public abstract class FileReader implements Reader {
 
     private AsyncFile file;
-    private Function<Buffer, JsonObject> transform;//init by reader config
     private transient JsonObject currentRow;
 
     public FileReader(Vertx vertx, JsonObject config) {
@@ -47,6 +46,8 @@ public abstract class FileReader implements Reader {
     }
 
     public abstract RecordParser parser();
+
+    public abstract Function<Buffer, JsonObject> transformer();
 
     @Override
     public ReaderConfig getReaderConfig() {
@@ -71,7 +72,7 @@ public abstract class FileReader implements Reader {
     @Override
     public ReadStream<JsonObject> handler(Handler<JsonObject> handler) {
         file.handler(event -> {
-            currentRow = transform.apply(event);
+            currentRow = transformer().apply(event);
             handler.handle(currentRow);
         });
         return this;
