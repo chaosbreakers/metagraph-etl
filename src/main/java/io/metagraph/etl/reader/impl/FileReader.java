@@ -24,41 +24,33 @@ import io.metagraph.etl.reader.config.ReaderConfig;
 import io.vertx.core.AsyncResult;
 import io.vertx.core.Handler;
 import io.vertx.core.Vertx;
-import io.vertx.core.json.JsonArray;
+import io.vertx.core.buffer.Buffer;
+import io.vertx.core.file.AsyncFile;
 import io.vertx.core.json.JsonObject;
+import io.vertx.core.parsetools.RecordParser;
 import io.vertx.core.streams.ReadStream;
-import io.vertx.ext.jdbc.JDBCClient;
-import io.vertx.ext.sql.SQLRowStream;
 
 /**
  * @author Ranger Tsao(https://github.com/boliza)
  */
-public class JDBCReader implements Reader {
+public abstract class FileReader implements Reader {
 
-    private Vertx vertx;
-
-    private JDBCClient jdbcClient;
-    private ReaderConfig readerConfig;
-
-    private SQLRowStream delegate;
-    private Function<JsonArray, JsonObject> transform;//init by reader config
-
+    private AsyncFile file;
+    private Function<Buffer, JsonObject> transform;//init by reader config
     private transient JsonObject currentRow;
 
-    public JDBCReader(Vertx vertx, JsonObject config) {
-        this.vertx = vertx;
-        jdbcClient = JDBCClient.createShared(vertx, config);
+    public FileReader(Vertx vertx, JsonObject config) {
         vertx.executeBlocking(h -> {
-                                  //open connection and query by stream
                               },
                               r -> {
-                                  //TODO SQLRowStream
                               });
     }
 
+    public abstract RecordParser parser();
+
     @Override
     public ReaderConfig getReaderConfig() {
-        return readerConfig;
+        return null;
     }
 
     @Override
@@ -68,18 +60,17 @@ public class JDBCReader implements Reader {
 
     @Override
     public void close(Handler<AsyncResult<Void>> completionHandler) {
-        delegate.close(completionHandler);
+        file.close(completionHandler);
     }
 
     @Override
     public ReadStream<JsonObject> exceptionHandler(Handler<Throwable> handler) {
-        delegate.exceptionHandler(handler);
-        return this;
+        return null;
     }
 
     @Override
     public ReadStream<JsonObject> handler(Handler<JsonObject> handler) {
-        delegate.handler(event -> {
+        file.handler(event -> {
             currentRow = transform.apply(event);
             handler.handle(currentRow);
         });
@@ -88,18 +79,19 @@ public class JDBCReader implements Reader {
 
     @Override
     public ReadStream<JsonObject> pause() {
-        delegate.pause();
+        file.pause();
         return this;
     }
 
     @Override
     public ReadStream<JsonObject> resume() {
-        delegate.resume();
+        file.resume();
         return this;
     }
 
     @Override
     public ReadStream<JsonObject> endHandler(Handler<Void> endHandler) {
+        file.endHandler(endHandler);
         return this;
     }
 }

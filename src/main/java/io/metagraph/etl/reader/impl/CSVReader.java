@@ -108,6 +108,11 @@ public class CSVReader implements Reader {
     }
 
     @Override
+    public JsonObject nextRow() {
+        return null;
+    }
+
+    @Override
     public void close(Handler<AsyncResult<Void>> completionHandler) {
 
     }
