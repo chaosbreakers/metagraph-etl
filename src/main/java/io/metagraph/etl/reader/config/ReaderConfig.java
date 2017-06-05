@@ -19,10 +19,21 @@ package io.metagraph.etl.reader.config;
 
 import java.util.List;
 
+import io.vertx.core.Vertx;
+import io.vertx.core.json.JsonObject;
+
 /**
- * Created by eguoyix on 17/5/21.
+ * @author Ranger Tsao(https://github.com/boliza)
  */
 public interface ReaderConfig {
+
+    static ReaderConfig readFromJson(JsonObject jsonObject) {
+        return null;
+    }
+
+    static ReaderConfig readFromJdbc(Vertx vertx, JsonObject jsonObject) {
+        return null;
+    }
 
     /**
      * get label for the file to read, all record in a file have the same label

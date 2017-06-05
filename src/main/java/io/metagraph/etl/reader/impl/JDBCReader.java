@@ -38,22 +38,24 @@ public class JDBCReader implements Reader {
     private Vertx vertx;
 
     private JDBCClient jdbcClient;
-    private ReaderConfig readerConfig;
 
-    private SQLRowStream delegate;
+    private SQLRowStream delegate;//remove this delegate
+
+    private ReaderConfig readerConfig;
     private Function<JsonArray, JsonObject> transform;//init by reader config
 
     private transient JsonObject currentRow;
 
+    private Handler<Throwable> exceptionHandler;
+    private Handler<JsonObject> handler;
+    private Handler<Void> endHandler;
+    private Handler<Void> rsClosedHandler;
+
     public JDBCReader(Vertx vertx, JsonObject config) {
         this.vertx = vertx;
-        jdbcClient = JDBCClient.createShared(vertx, config);
-        vertx.executeBlocking(h -> {
-                                  //open connection and query by stream
-                              },
-                              r -> {
-                                  //TODO SQLRowStream
-                              });
+        readerConfig = ReaderConfig.readFromJson(config.getJsonObject("etl"));
+        transform = objects -> null;//init transform using config
+        jdbcClient = JDBCClient.createShared(vertx, config.getJsonObject("jdbc"));
     }
 
     @Override
@@ -78,7 +80,7 @@ public class JDBCReader implements Reader {
     }
 
     @Override
-    public ReadStream<JsonObject> handler(Handler<JsonObject> handler) {
+    public final ReadStream<JsonObject> handler(Handler<JsonObject> handler) {
         delegate.handler(event -> {
             currentRow = transform.apply(event);
             handler.handle(currentRow);
@@ -100,6 +102,7 @@ public class JDBCReader implements Reader {
 
     @Override
     public ReadStream<JsonObject> endHandler(Handler<Void> endHandler) {
+        delegate.endHandler(endHandler);
         return this;
     }
 }

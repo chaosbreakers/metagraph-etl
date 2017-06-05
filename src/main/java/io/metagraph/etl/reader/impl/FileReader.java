@@ -27,6 +27,8 @@ import io.vertx.core.Vertx;
 import io.vertx.core.buffer.Buffer;
 import io.vertx.core.file.AsyncFile;
 import io.vertx.core.json.JsonObject;
+import io.vertx.core.logging.Logger;
+import io.vertx.core.logging.LoggerFactory;
 import io.vertx.core.parsetools.RecordParser;
 import io.vertx.core.streams.ReadStream;
 
@@ -34,6 +36,8 @@ import io.vertx.core.streams.ReadStream;
  * @author Ranger Tsao(https://github.com/boliza)
  */
 public abstract class FileReader implements Reader {
+
+    protected Logger logger = LoggerFactory.getLogger(getClass());
 
     private AsyncFile file;
     private transient JsonObject currentRow;
@@ -66,7 +70,8 @@ public abstract class FileReader implements Reader {
 
     @Override
     public ReadStream<JsonObject> exceptionHandler(Handler<Throwable> handler) {
-        return null;
+        file.exceptionHandler(handler);
+        return this;
     }
 
     @Override

@@ -17,128 +17,30 @@
 
 package io.metagraph.etl.reader.impl;
 
-import org.apache.commons.lang3.StringUtils;
+import java.util.function.Function;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import io.metagraph.etl.common.Constant;
-import io.metagraph.etl.reader.Reader;
-import io.metagraph.etl.reader.config.ReaderConfig;
-import io.metagraph.etl.reader.rule.EdgeLabelNamingRule;
-import io.metagraph.etl.reader.rule.PropertyMappingRule;
-import io.vertx.core.AsyncResult;
-import io.vertx.core.Handler;
+import io.vertx.core.Vertx;
+import io.vertx.core.buffer.Buffer;
 import io.vertx.core.json.JsonObject;
-import io.vertx.core.streams.ReadStream;
+import io.vertx.core.parsetools.RecordParser;
 
 /**
- * Created by eguoyix on 17/5/21.
+ * @author Ranger Tsao(https://github.com/boliza)
  */
-public class CSVReader implements Reader {
+public class CSVReader extends FileReader {
 
-    private static final String CSV_SPLITTER = ",";
-
-    private ReaderConfig readerConfig;
-
-    private PropertyMappingRule propertyMappingRule;
-
-    private EdgeLabelNamingRule edgeLabelNamingRule;
-
-    private Map<Integer, String> csvHeader;
-
-
-    public CSVReader(Map<Integer, String> csvHeader, ReaderConfig readerConfig) {
-        this.csvHeader = csvHeader;
-        this.readerConfig = readerConfig;
-    }
-
-    public Map<String, Object> readNext(ReaderConfig readerConfig) {
-        String[] recordFields = null;
-        String record = null;
-        if (StringUtils.isNotBlank(record)) {
-            recordFields = record.split(CSV_SPLITTER);
-            if (recordFields.length != csvHeader.size()) {
-                //TODO: yixi.guo define specific exception type
-                throw new RuntimeException("csv file format or reader config error");
-            }
-        }
-        Map<String, Object> vertex = constructVertex(csvHeader, recordFields, readerConfig);
-        List<Map<String, Object>> edges = constructEdges(csvHeader, recordFields, readerConfig);
-
-        Map<String, Object> result = new HashMap<>();
-        //TODO: use class hash code as key?
-        result.put(Constant.VERTEX_KEY, vertex);
-        result.put(Constant.EDGES_KEY, edges);
-        return result;
-    }
-
-    private List<Map<String, Object>> constructEdges(Map<Integer, String> csvHeader, String[] recordFields, ReaderConfig readerConfig) {
-        List<Map<String, Object>> result = new ArrayList<>();
-        List<String> outEdgeFields = readerConfig.getOutEdgeFields();
-        for (String outEdgeField : outEdgeFields) {
-            String fromBidField = readerConfig.getBidField();
-            String label = edgeLabelNamingRule.getLabel(fromBidField, outEdgeField);
-            Map<String, Object> edge = new HashMap<>();
-            edge.put(Constant.LABEL_KEY, label);
-            edge.put("fromBizId", "");
-            edge.put("", "");
-        }
-        return null;
-    }
-
-    private Map<String, Object> constructVertex(Map<Integer, String> csvHeader, String[] recordFields, ReaderConfig readerConfig) {
-        Map<String, Object> vertext = new HashMap<>();
-        vertext.put(Constant.LABEL_KEY, readerConfig.getLabel());
-        return null;
-    }
-
-    private String getBid(ReaderConfig readerConfig, String record) {
-        return null;
-    }
-
-    private String getLabel(ReaderConfig readerConfig) {
-        return null;
-    }
-
-    public ReaderConfig getReaderConfig() {
-        return this.readerConfig;
+    public CSVReader(Vertx vertx, JsonObject config) {
+        super(vertx, config);
     }
 
     @Override
-    public JsonObject nextRow() {
-        return null;
+    public RecordParser parser() {
+        return RecordParser.newDelimited(System.getProperty("line.separator", "\n"),
+                                         buffer -> logger.info("string of this line is: {0}", buffer.toString()));
     }
 
     @Override
-    public void close(Handler<AsyncResult<Void>> completionHandler) {
-
-    }
-
-    @Override
-    public ReadStream<JsonObject> exceptionHandler(Handler<Throwable> handler) {
-        return null;
-    }
-
-    @Override
-    public ReadStream<JsonObject> handler(Handler<JsonObject> handler) {
-        return null;
-    }
-
-    @Override
-    public ReadStream<JsonObject> pause() {
-        return null;
-    }
-
-    @Override
-    public ReadStream<JsonObject> resume() {
-        return null;
-    }
-
-    @Override
-    public ReadStream<JsonObject> endHandler(Handler<Void> endHandler) {
-        return null;
+    public Function<Buffer, JsonObject> transformer() {
+        return buffer -> null;
     }
 }
