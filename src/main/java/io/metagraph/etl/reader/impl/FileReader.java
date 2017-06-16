@@ -26,6 +26,7 @@ import io.vertx.core.Handler;
 import io.vertx.core.Vertx;
 import io.vertx.core.buffer.Buffer;
 import io.vertx.core.file.AsyncFile;
+import io.vertx.core.file.OpenOptions;
 import io.vertx.core.json.JsonObject;
 import io.vertx.core.logging.Logger;
 import io.vertx.core.logging.LoggerFactory;
@@ -41,8 +42,18 @@ public abstract class FileReader implements Reader {
 
     private AsyncFile file;
     private transient JsonObject currentRow;
+    /**
+     * file config
+     */
+    protected JsonObject config;
 
     public FileReader(Vertx vertx, JsonObject config) {
+        this.config = config;
+        String filePath = config.getString("file_path");
+        vertx.fileSystem().open(filePath, new OpenOptions(), result -> {
+            file = result.result();
+            file.handler(parser());
+        });
         vertx.executeBlocking(h -> {
                               },
                               r -> {

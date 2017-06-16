@@ -1,6 +1,6 @@
 {
   "file_reader": {
-    "provider_class": "io.metagraph.etl.reader.impl.CSVReader",
+    "provider_class": "io.metagraph.etl.reader.impl.CSVReader"
   },
   "graph": {
     "provider_class": "",

@@ -20,6 +20,8 @@ package io.metagraph.etl;
 import io.metagraph.etl.common.Constant;
 import io.metagraph.etl.reader.Reader;
 import io.vertx.core.AbstractVerticle;
+import io.vertx.core.json.JsonArray;
+import io.vertx.core.json.JsonObject;
 import io.vertx.core.logging.Logger;
 import io.vertx.core.logging.LoggerFactory;
 
@@ -33,11 +35,15 @@ public class ReaderVerticle extends AbstractVerticle {
 
     @Override
     public void start() throws Exception {
-        //init reader
-        reader = Reader.createReader(vertx, config());
-        assert reader != null;
-        reader.handler(row -> vertx.eventBus().send(Constant.EVENTBUS_ETL_RECEIVER, row));
-        reader.endHandler(end -> vertx.close());
+        JsonObject config = config();
+        JsonArray files = config.getJsonArray("files");
+        //init reader,one reader for each file
+        for(Object file:files.getList()){
+            reader = Reader.createReader(vertx, (JsonObject) file);
+            assert reader != null;
+            reader.handler(row -> vertx.eventBus().send(Constant.EVENTBUS_ETL_RECEIVER, row));
+            reader.endHandler(end -> vertx.close());
+        }
     }
 
     @Override

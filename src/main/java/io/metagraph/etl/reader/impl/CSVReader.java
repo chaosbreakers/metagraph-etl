@@ -21,6 +21,7 @@ import java.util.function.Function;
 
 import io.vertx.core.Vertx;
 import io.vertx.core.buffer.Buffer;
+import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
 import io.vertx.core.parsetools.RecordParser;
 
@@ -36,11 +37,25 @@ public class CSVReader extends FileReader {
     @Override
     public RecordParser parser() {
         return RecordParser.newDelimited(System.getProperty("line.separator", "\n"),
-                                         buffer -> logger.info("string of this line is: {0}", buffer.toString()));
+                                         buffer -> {
+                                             logger.info("string of this line is: {0}", buffer.toString());
+                                             transformer().apply(buffer);
+                                         });
     }
 
     @Override
     public Function<Buffer, JsonObject> transformer() {
-        return buffer -> null;
+        String vertexLable = config.getString("vertex_label");
+        JsonObject rule = config.getJsonObject("rule");
+        String bidColumn = rule.getString("bid_column");
+        JsonArray edges = rule.getJsonArray("edges");
+        return new Function<Buffer, JsonObject>() {
+            @Override
+            public JsonObject apply(Buffer buffer) {
+                String bufferStr = buffer.toString();
+                JsonObject result = new JsonObject();
+                return result;
+            }
+        };
     }
 }
