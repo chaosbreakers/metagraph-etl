@@ -17,8 +17,13 @@
 
 package io.metagraph.etl.reader.impl;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import java.util.function.Function;
 
+import io.metagraph.etl.common.entity.Vertex;
+import io.metagraph.etl.util.CSVUtil;
 import io.vertx.core.Vertx;
 import io.vertx.core.buffer.Buffer;
 import io.vertx.core.json.JsonArray;
@@ -49,12 +54,27 @@ public class CSVReader extends FileReader {
         JsonObject rule = config.getJsonObject("rule");
         String bidColumn = rule.getString("bid_column");
         JsonArray edges = rule.getJsonArray("edges");
+        String csvHeader = config.getString("csv_header");
         return new Function<Buffer, JsonObject>() {
             @Override
             public JsonObject apply(Buffer buffer) {
                 String bufferStr = buffer.toString();
-                JsonObject result = new JsonObject();
+                if(bufferStr.equals(csvHeader)){
+                    return null;
+                }
+                Vertex vertex = buildVertexFromCsvLine(bufferStr);
+                JsonObject result = JsonObject.mapFrom(vertex);
                 return result;
+            }
+
+            private Vertex buildVertexFromCsvLine(String bufferStr) {
+                Map<String,String> record = CSVUtil.convertRecordLineToMap(csvHeader,bufferStr);
+                Vertex vertex = new Vertex();
+                vertex.setBid(record.get(bidColumn));
+                vertex.setLabel(vertexLable);
+                //TODO:yixi.guo remove none property entries
+                vertex.setProperties(record);
+                return vertex;
             }
         };
     }
