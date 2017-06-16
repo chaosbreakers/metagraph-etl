@@ -1,0 +1,34 @@
+{
+  "file_reader": {
+    "provider_class": "io.metagraph.etl.reader.impl.CSVReader",
+  },
+  "graph": {
+    "provider_class": "",
+    "provider_config": {
+    }
+  },
+  "etl": {
+    "schedule": {
+      "enable": "true",
+      "internal": 480000
+    },
+    "files": [
+      {
+        "file_path":"",
+        "file_name": "",
+        "vertex_label": "",
+        "rule": {
+          "bid_column": "",
+          "edges": [
+            {
+              "join_label": "",
+              "join_bid_column": ""
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "metrics": {
+  }
+}
